@@ -97,8 +97,7 @@ void renderScene(void) {
 	draw_street_lines(street_lines_z);
 	draw_street_lines(street_lines_z + 100);
 
-
-	Car car(0, 0, 0, 3);
+	Car car(0, 0, -10, 7);
 	car.drawCar();
 	
 	//glPushMatrix();
