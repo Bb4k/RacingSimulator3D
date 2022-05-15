@@ -3,6 +3,8 @@
 #include<gl/freeglut.h>
 #include<math.h>
 #include "Car.h"
+#include "Background.h"
+
 // angle of rotation for the camera direction
 float angle = 0.0f;
 // actual vector representing the camera's direction
@@ -38,29 +40,6 @@ void changeSize(int w, int h)
 }
 
 
-
-void draw_street_lines(float z) {
-
-	street_lines_z -= .1;
-
-	if (street_lines_z < -100)
-		street_lines_z = 100;
-	glColor3f(0.9f, 0.9f, 0.9f);
-
-	glPushMatrix();
-	glTranslatef(-4.f, 0, -z);
-	glScaled(1, 0.7, 8);
-	glutSolidCube(1);
-	glPopMatrix();
-
-	glPushMatrix();
-	glTranslatef(4.f, 0, -z);
-	glScaled(1, 0.7, 8);
-	glutSolidCube(1);
-	glPopMatrix();
-
-}
-
 void renderScene(void) {
 
 
@@ -71,36 +50,24 @@ void renderScene(void) {
 	glLoadIdentity();
 
 	// Set the camera
-	gluLookAt(x, 7.0f, z,
-		x + lx, 6.7f, z + lz,
-		0, 0.1f, 0.0f);
+	gluLookAt(	x, 7.0f, z,
+				x + lx, 6.7f, z + lz,
+				0, 0.1f, 0.0f);
 
-	// Draw ground
-	glColor3f(0.3f, 0.7f, 0.3f);
-	glBegin(GL_QUADS);
-	glVertex3f(-200.0f, 0.0f, -200.0f);
-	glVertex3f(-200.0f, 0.0f, 200.0f);
-	glVertex3f(200.0f, 0.0f, 200.0f);
-	glVertex3f(200.0f, 0.0f, -200.0f);
-	glEnd();
+	street_lines_z -= 0.2;
+	if (street_lines_z < -100)
+		street_lines_z = 100;
 
-	//draw street
-	glColor3f(0.2f, 0.2f, 0.2f);
+	Background bg;
+		bg.drawGround(0.2, 0.7, 0.2, 200, 0);
+		bg.drawStreet(0.2, 0.2, 0.2, 24, 0.5, 400, 1);
+		bg.drawStreetLines(street_lines_z);
+
+	Car car(12, 1, 0, 5);
 	glPushMatrix();
-	glScaled(24, 0.5, 400);
-	glutSolidCube(1);
+		glRotatef(90, 0, 1, 0);
+		car.drawCar();
 	glPopMatrix();
-
-
-	// draw street lines
-
-	draw_street_lines(street_lines_z);
-	draw_street_lines(street_lines_z + 100);
-
-
-	Car car(0, 0, 0, 3);
-	car.drawCar();
-	
 	//glPushMatrix();
 	//	glTranslatef(x, 1, z-10);
 	//	drawSnowMan();
