@@ -42,7 +42,6 @@ void changeSize(int w, int h)
 
 void renderScene(void) {
 
-
 	// Clear Color and Depth Buffers
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 

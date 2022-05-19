@@ -3,6 +3,7 @@
 
 #include<GL/freeglut.h>
 
+
 class Background {
 
 public:
@@ -21,6 +22,7 @@ public:
 	}
 
 	void drawStreet(GLfloat r, GLfloat g, GLfloat b, GLfloat scale_x, GLfloat scale_y, GLfloat scale_z, double size) {
+
 		//draw street
 		glColor3f(r, g, b);
 		glPushMatrix();
