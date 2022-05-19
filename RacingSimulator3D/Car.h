@@ -29,6 +29,10 @@ public:
 		this->incr_posZ(direction);
 	}
 
+	void incr_posX(GLfloat val) {
+		this->positionX += (GLfloat)val;
+	}
+
 	void drawCar() {
 
 		//float dimension = 3.0f;

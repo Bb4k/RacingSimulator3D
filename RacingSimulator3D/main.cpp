@@ -29,6 +29,10 @@ int car_nfs_slowmo_ = 0;
 GLfloat car_rot = 0.0;
 GLfloat car_rot_max = 0.0;
 
+Car car_left_lane(-50, 1, -8, 5);
+Car car_mid_lane(-50, 1, 0, 5);
+Car car_right_lane(-50, 1, 8, 5);
+
 void changeSize(int w, int h)
 {
 
@@ -63,16 +67,16 @@ void go_left(void) {
 		lz = -cos(angle);
 		x -= 0.5f;
 		if (car.get_pos_Z() > GRID_LEFT / 2 && car.get_pos_Z() < GRID_MID)
-			car_rot -= contor_z ;
+			car_rot -= contor_z;
 
 		if (car.get_pos_Z() < GRID_LEFT / 2)
 			car_rot += contor_z;
 
 		if (car.get_pos_Z() > GRID_MID && car.get_pos_Z() < GRID_RIGHT / 2)
-			car_rot -= contor_z;
+			car_rot += contor_z;
 
 		if (car.get_pos_Z() > GRID_RIGHT / 2)
-			car_rot += contor_z;
+			car_rot -= contor_z;
 	}
 	glutPostRedisplay();
 }
@@ -132,9 +136,10 @@ void renderScene(void) {
 		if (((car.get_pos_Z() != (GLfloat)GRID_RIGHT) && (car.get_pos_Z() != (GLfloat)GRID_MID)) && contor_z == 1) 
 			go_right();
 		
-		if (car.get_pos_Z() == GRID_MID) {
+		if (car.get_pos_Z() == GRID_LEFT || car.get_pos_Z() == GRID_MID || car.get_pos_Z() == GRID_RIGHT) {
 			car_rot = 0;
-			contor_z = 0;
+			if (car.get_pos_Z() == GRID_MID)
+				contor_z = 0;
 		}
 
 
@@ -144,6 +149,25 @@ void renderScene(void) {
 		glRotatef(90+car_rot, 0, 1, 0);
 		car.drawCar();
 	glPopMatrix();
+
+	glPushMatrix();
+		glRotatef(-90, 0, 1, 0);
+		car_left_lane.drawCar();
+		car_left_lane.incr_posX(.1f);
+	glPopMatrix();
+
+	glPushMatrix();
+	glRotatef(-90, 0, 1, 0);
+		car_mid_lane.drawCar();
+		car_mid_lane.incr_posX(.1f);
+	glPopMatrix();
+
+	glPushMatrix();
+	glRotatef(-90, 0, 1, 0);
+		car_right_lane.drawCar();
+		car_right_lane.incr_posX(.1f);
+	glPopMatrix();
+	 
 	//glPushMatrix();
 	//	glTranslatef(x, 1, z-10);
 	//	drawSnowMan();
