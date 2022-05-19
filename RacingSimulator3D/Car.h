@@ -8,7 +8,7 @@ class Car {
 public:
 	float positionX;
 	float positionY;
-	float positionZ;
+	GLfloat positionZ;
 	float dimension;
 
 	Car(float positionX, float positionY, float positionZ, float dimension) {
@@ -16,6 +16,17 @@ public:
 		this->positionY = positionY;
 		this->positionZ = positionZ;
 		this->dimension = dimension;
+	}
+
+	GLfloat get_pos_Z() {
+		return this->positionZ;
+	}
+	void incr_posZ(GLfloat val) {
+		this->positionZ += (GLfloat)val;
+	}
+
+	void change_lane(GLfloat direction) {
+		this->incr_posZ(direction);
 	}
 
 	void drawCar() {

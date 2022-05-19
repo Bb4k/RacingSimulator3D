@@ -29,14 +29,14 @@ public:
 		glPopMatrix();
 
 		glPushMatrix();
-			glColor3f(0.6, 0.6, 0.6);
+			glColor3f((GLfloat)0.6f, (GLfloat)0.6f, (GLfloat)0.6f);
 			glTranslated(-scale_x/2-.99f, 0, 0);
 			glScaled(1, scale_y+3, scale_z);
 			glutSolidCube(1);
 		glPopMatrix();
 
 		glPushMatrix();
-			glColor3f(0.6, 0.6, 0.6);
+			glColor3f((GLfloat)0.6f, (GLfloat)0.6f, (GLfloat)0.6f);
 			glTranslated(scale_x / 2 + .99f, 0, 0);
 			glScaled(1, scale_y + 3, scale_z);
 			glutSolidCube(1);
@@ -45,7 +45,7 @@ public:
 	}
 
 	void drawStreetLines(float street_lines_z) {
-		street_lines_z -= .1;
+		street_lines_z -= (GLfloat)0.1f;
 
 		if (street_lines_z < -100)
 			street_lines_z = 100;
