@@ -4,14 +4,15 @@
 #include<GL/freeglut.h>
 
 class Car {
-
+	
 public:
 	float positionX;
 	float positionY;
 	GLfloat positionZ;
 	float dimension;
 
-	Car(float positionX, float positionY, float positionZ, float dimension) {
+
+	Car(float positionX=0, float positionY=1, float positionZ=0, float dimension=5) {
 		this->positionX = positionX;
 		this->positionY = positionY;
 		this->positionZ = positionZ;
@@ -20,6 +21,9 @@ public:
 
 	GLfloat get_pos_Z() {
 		return this->positionZ;
+	}
+	GLfloat get_pos_X() {
+		return this->positionX;
 	}
 	void incr_posZ(GLfloat val) {
 		this->positionZ += (GLfloat)val;

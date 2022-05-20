@@ -45,10 +45,7 @@ public:
 	}
 
 	void drawStreetLines(float street_lines_z) {
-		street_lines_z -= (GLfloat)0.1f;
-
-		if (street_lines_z < -100)
-			street_lines_z = 100;
+	
 		glColor3f(0.9f, 0.9f, 0.9f);
 
 		glPushMatrix();

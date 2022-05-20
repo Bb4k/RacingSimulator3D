@@ -1,8 +1,15 @@
 //SURSA:  lighthouse3D:  http://www.lighthouse3d.com/tutorials/glut-tutorial/keyboard-example-moving-around-the-world/ 
 
-#include<gl/freeglut.h>
-#include<math.h>
+
+
+#include <math.h>
 #include <iostream>
+#include <stdlib.h>
+#include <time.h>
+#include <vector>
+#include <tuple>
+
+#include <GL/freeglut.h>
 
 #include "Car.h"
 #include "Background.h"
@@ -29,9 +36,14 @@ int car_nfs_slowmo_ = 0;
 GLfloat car_rot = 0.0;
 GLfloat car_rot_max = 0.0;
 
-Car car_left_lane(-50, 1, -8, 5);
-Car car_mid_lane(-50, 1, 0, 5);
-Car car_right_lane(-50, 1, 8, 5);
+//incoming car
+int car_incoming_pos_val[3] = {
+		GRID_LEFT,
+		GRID_MID,
+		GRID_RIGHT
+};
+
+std::vector<std::tuple<Car, Car>> incoming_cars[6];
 
 void changeSize(int w, int h)
 {
@@ -104,74 +116,108 @@ void go_right(void) {
 	glutPostRedisplay();
 }
 
-void renderScene(void) {
+void player_car() {
+
+	glPushMatrix();
+		glRotatef(90 + car_rot, 0, 1, 0);
+		car.drawCar();
+	glPopMatrix();
+
+	if (((car.get_pos_Z() != (GLfloat)GRID_LEFT) && (car.get_pos_Z() != (GLfloat)GRID_MID)) && contor_z == -1)
+		go_left();
+
+	if (((car.get_pos_Z() != (GLfloat)GRID_RIGHT) && (car.get_pos_Z() != (GLfloat)GRID_MID)) && contor_z == 1)
+		go_right();
+
+	if (car.get_pos_Z() == GRID_LEFT || car.get_pos_Z() == GRID_MID || car.get_pos_Z() == GRID_RIGHT) {
+		car_rot = 0;
+		if (car.get_pos_Z() == GRID_MID)
+			contor_z = 0;
+	}
+}
+
+std::tuple <Car, Car> generate_incoming_cars() {
+	struct cars {
+		Car car_1;
+		Car car_2;
+	};
+	
+	Car car_1( (-(float)(rand()%100+100)), (float)1, (float)car_incoming_pos_val[rand()%3], (float)5);
+	Car car_2( (-(float)(rand()%100+100)), (float)1, (float)car_incoming_pos_val[rand()%3], (float)5);
 
 
-	// Clear Color and Depth Buffers
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	return {car_1, car_2};
+}
 
-	// Reset transformations
-	glLoadIdentity();
+void incoming() {
 
-	// Set the camera
-	gluLookAt(	x, 7.0f, z,
-				x + lx, 6.7f, z + lz,
-				0, 0.1f, 0.0f);
+	if (incoming_cars->empty() ) {
+		std::tuple<Car, Car> cars = generate_incoming_cars();
+		incoming_cars->emplace_back(cars);
+	}
 
-	street_lines_z -= 0.2;
-	if (street_lines_z < -100)
-		street_lines_z = 100;
+	if (std::get<0>(incoming_cars->back()).get_pos_X() > -10 || std::get<1>(incoming_cars->back()).get_pos_X() > -10) {
+		std::tuple<Car, Car> cars = generate_incoming_cars();
+		incoming_cars->emplace_back(cars);
+	}
+
+	if (std::get<0>(incoming_cars->back()).get_pos_X() > 0 || std::get<1>(incoming_cars->back()).get_pos_X() > 0) {
+		incoming_cars->pop_back();
+	}
+
+
+	for (int i = 0; i < incoming_cars->size(); ++i) {
+			
+		std::cout << i << " " << std::get<0>(incoming_cars->at(i)).get_pos_Z() << " " << std::get<1>(incoming_cars->at(0)).get_pos_Z();
+		(std::get<1>(incoming_cars->at(i))).incr_posX(2);
+		(std::get<0>(incoming_cars->at(i))).incr_posX(2);
+
+		glPushMatrix();
+		glRotatef(-90, 0, 1, 0);
+		(std::get<0>(incoming_cars->at(i))).drawCar();
+		glPopMatrix();
+
+		glPushMatrix();
+		glRotatef(-90, 0, 1, 0);
+		(std::get<1>(incoming_cars->at(i))).drawCar();
+		glPopMatrix();
+
+	}
+
+	
+
+}
+
+void draw_env() {
+
 
 	Background bg;
 		bg.drawGround(.7, .6, .6, 200, 0);
 		bg.drawStreet(0.2, 0.2, 0.2, 24, 0.5, 400, 1);
 		bg.drawStreetLines(street_lines_z);
 
-		std::cout << "DIFF LEFT MID: " << abs(car.get_pos_Z() - GRID_MID) << " " << std::numeric_limits<float>::epsilon() << std::endl;
+}
 
-		
-		if (((car.get_pos_Z() != (GLfloat)GRID_LEFT) && (car.get_pos_Z() != (GLfloat)GRID_MID)) && contor_z == -1) 
-			go_left();
+void renderScene(void) {
+
+
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	glLoadIdentity();
+	//			x		y		z
+	gluLookAt(	x,		7.0f,	z,			//eye
+				x + lx, 6.7f,	z + lz,		//center
+				0,		0.1f,	0.0f);		//up
+
 	
-		if (((car.get_pos_Z() != (GLfloat)GRID_RIGHT) && (car.get_pos_Z() != (GLfloat)GRID_MID)) && contor_z == 1) 
-			go_right();
 		
-		if (car.get_pos_Z() == GRID_LEFT || car.get_pos_Z() == GRID_MID || car.get_pos_Z() == GRID_RIGHT) {
-			car_rot = 0;
-			if (car.get_pos_Z() == GRID_MID)
-				contor_z = 0;
-		}
+	draw_env();
+	player_car();
+	incoming();
 
 
 
-
-	glPushMatrix();
-		glRotatef(90+car_rot, 0, 1, 0);
-		car.drawCar();
-	glPopMatrix();
-
-	glPushMatrix();
-		glRotatef(-90, 0, 1, 0);
-		car_left_lane.drawCar();
-		car_left_lane.incr_posX(.1f);
-	glPopMatrix();
-
-	glPushMatrix();
-	glRotatef(-90, 0, 1, 0);
-		car_mid_lane.drawCar();
-		car_mid_lane.incr_posX(.1f);
-	glPopMatrix();
-
-	glPushMatrix();
-	glRotatef(-90, 0, 1, 0);
-		car_right_lane.drawCar();
-		car_right_lane.incr_posX(.1f);
-	glPopMatrix();
 	 
-	//glPushMatrix();
-	//	glTranslatef(x, 1, z-10);
-	//	drawSnowMan();
-	//glPopMatrix();
 	glutPostRedisplay();
 	glutSwapBuffers();
 	
@@ -233,8 +279,8 @@ void processSpecialKeys(int key, int xx, int yy) {
 int main(int argc, char** argv) {
 
 	// init GLUT and create window
-
 	glutInit(&argc, argv);
+	srand(time(NULL));
 	glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA);
 	glutInitWindowPosition(100, 100);
 	glutInitWindowSize(1024, 768);
