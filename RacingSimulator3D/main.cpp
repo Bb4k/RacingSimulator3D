@@ -1,6 +1,7 @@
 //SURSA:  lighthouse3D:  http://www.lighthouse3d.com/tutorials/glut-tutorial/keyboard-example-moving-around-the-world/ 
 
 #include<gl/freeglut.h>
+#include <iostream>
 #include<math.h>
 #include "Car.h"
 #include "Background.h"
@@ -14,6 +15,11 @@ float x = 0.0f, z = 0.0f;
 
 float street_lines_z = 100;
 
+GLfloat xwMin = -30.0, ywMin = -30.0, xwMax = 30.0, ywMax = 30.0;
+
+GLfloat dnear = 1.0, dfar = 40.0;
+
+Car car(12, 1, 0, 5);
 void changeSize(int w, int h)
 {
 
@@ -39,15 +45,36 @@ void changeSize(int w, int h)
 	glMatrixMode(GL_MODELVIEW);
 }
 
+void light(int x) {
+	// sursa de lumina 0
+	glEnable(GL_LIGHT0);
+	GLfloat pozitial0[] = { (float)x, 200.0f, 0.0f, 0.0f };
+	GLfloat rosu[] = { 1.0, 0.0, 0.0, 1.0 };
+	GLfloat alb[] = { 1.0, 1.0, 1.0, 0.0 };
+	GLfloat negru[] = { 0.0, 0.0, 0.0, 0.0 };
+	glLightfv(GL_LIGHT0, GL_POSITION, pozitial0);
+	glLightfv(GL_LIGHT0, GL_AMBIENT, alb);
+	glLightf(GL_LIGHT0, GL_CONSTANT_ATTENUATION, 0.1);
+	glLightf(GL_LIGHT0, GL_LINEAR_ATTENUATION, 0.0);
+	glLightf(GL_LIGHT0, GL_QUADRATIC_ATTENUATION, 0.2);
 
+}
+float light_x = -720.0f;
 void renderScene(void) {
 
 	// Clear Color and Depth Buffers
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+
+	std::cout << light_x;
+	if (light_x > 720.0f)
+		light_x = -720.0f;
+	else
+		++light_x;
+	light(light_x);
+
 	// Reset transformations
 	glLoadIdentity();
-
 	// Set the camera
 	gluLookAt(	x, 7.0f, z,
 				x + lx, 6.7f, z + lz,
@@ -59,10 +86,11 @@ void renderScene(void) {
 
 	Background bg;
 		bg.drawGround(.7, .6, .6, 200, 0);
-		bg.drawStreet(0.2, 0.2, 0.2, 24, 0.5, 400, 1);
 		bg.drawStreetLines(street_lines_z);
+		bg.drawStreet(0.2, 0.2, 0.2, 24, 0.5, 400, 1);
 
-	Car car(12, 1, 0, 5);
+
+	
 	glPushMatrix();
 		glRotatef(90, 0, 1, 0);
 		car.drawCar();
@@ -117,6 +145,8 @@ void processSpecialKeys(int key, int xx, int yy) {
 }
 
 
+
+
 int main(int argc, char** argv) {
 
 	// init GLUT and create window
@@ -134,17 +164,18 @@ int main(int argc, char** argv) {
 
 	glClearColor(0.2f, .8f, 1.0f, 0.7);
 
-
 	glutKeyboardFunc(processNormalKeys);
 	glutSpecialFunc(processSpecialKeys);
 
 	// OpenGL init
 	glEnable(GL_DEPTH_TEST);
-
+	glEnable(GL_LIGHTING);
 	angle -= 0.00f;
 	lx = sin(angle);
 	lz = -cos(angle);
+	
 	// enter GLUT event processing cycle
+	glutPostRedisplay();
 	glutMainLoop();
 
 
