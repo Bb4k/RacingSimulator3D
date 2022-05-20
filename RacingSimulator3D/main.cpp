@@ -74,7 +74,7 @@ void go_left(void) {
 	if ((float)car.get_pos_Z() > GRID_LEFT) {
 		std::cout << (GLfloat)car.get_pos_Z() << " " << GRID_LEFT << std::endl;
 		car.change_lane((GLfloat)(-.5f) - (GLfloat)0.05 * (GLfloat)car_nfs_slowmo_);
-		angle += 0.005;
+		angle += 0.008;
 		lx = sin(angle);
 		lz = -cos(angle);
 		x -= 0.5f;
@@ -97,7 +97,7 @@ void go_right(void) {
 	if ((float)car.get_pos_Z() < GRID_RIGHT) {
 		std::cout << (float)car.get_pos_Z() << " " << GRID_RIGHT << std::endl;
 		car.change_lane((GLfloat)(.5f) - (GLfloat)0.05 * (GLfloat)car_nfs_slowmo_);
-		angle -= 0.005;
+		angle -= 0.008;
 		lx = sin(angle);
 		lz = -cos(angle);
 		x += 0.5f;
