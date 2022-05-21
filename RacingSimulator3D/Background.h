@@ -11,12 +11,10 @@ public:
 	void drawGround(GLfloat r, GLfloat g, GLfloat b, GLfloat size, GLfloat y) {
 
 		glColor3f(r, g, b);
-		glBegin(GL_QUADS);
-			glVertex3f(-size, 0.0f, -size);
-			glVertex3f(-size, 0.0f, size);
-			glVertex3f(size, 0.0f, size);
-			glVertex3f(size, 0.0f, -size);
-		glEnd();
+		glPushMatrix();
+			glScaled(1000, y, 1000);
+			glutSolidCube(size);
+		glPopMatrix();
 
 		
 	}

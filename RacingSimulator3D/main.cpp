@@ -45,33 +45,38 @@ void changeSize(int w, int h)
 	glMatrixMode(GL_MODELVIEW);
 }
 
-void light(int x) {
+void light() {
 	// sursa de lumina 0
 	glEnable(GL_LIGHT0);
-	GLfloat pozitial0[] = { (float)x, 200.0f, 0.0f, 0.0f };
+	GLfloat pozitial0[] = { 0.0f, 2020.0f, 10.0f, 0.0f };
 	GLfloat rosu[] = { 1.0, 0.0, 0.0, 1.0 };
 	GLfloat alb[] = { 1.0, 1.0, 1.0, 0.0 };
 	GLfloat negru[] = { 0.0, 0.0, 0.0, 0.0 };
 	glLightfv(GL_LIGHT0, GL_POSITION, pozitial0);
 	glLightfv(GL_LIGHT0, GL_AMBIENT, alb);
-	glLightf(GL_LIGHT0, GL_CONSTANT_ATTENUATION, 0.1);
-	glLightf(GL_LIGHT0, GL_LINEAR_ATTENUATION, 0.0);
+	glLightf(GL_LIGHT0, GL_CONSTANT_ATTENUATION, 0.2);
+	glLightf(GL_LIGHT0, GL_LINEAR_ATTENUATION, 0.1);
 	glLightf(GL_LIGHT0, GL_QUADRATIC_ATTENUATION, 0.2);
 
 }
-float light_x = -720.0f;
+float light_x = -45.0f;
 void renderScene(void) {
 
 	// Clear Color and Depth Buffers
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 
-	std::cout << light_x;
-	if (light_x > 720.0f)
-		light_x = -720.0f;
+	/*std::cout << light_x;
+	if (light_x > 360.0f)
+		light_x = -360.0f;
 	else
-		++light_x;
-	light(light_x);
+		light_x+=1;*/
+
+	glPushMatrix();
+		light_x += 0.05;
+		glRotatef(light_x, 0, 0, light_x);
+		light();
+	glPopMatrix();
 
 	// Reset transformations
 	glLoadIdentity();
@@ -85,7 +90,7 @@ void renderScene(void) {
 		street_lines_z = 100;
 
 	Background bg;
-		bg.drawGround(.7, .6, .6, 200, 0);
+		bg.drawGround(.3, .3, .3, 200, 0);
 		bg.drawStreetLines(street_lines_z);
 		bg.drawStreet(0.2, 0.2, 0.2, 24, 0.5, 400, 1);
 
@@ -95,10 +100,6 @@ void renderScene(void) {
 		glRotatef(90, 0, 1, 0);
 		car.drawCar();
 	glPopMatrix();
-	//glPushMatrix();
-	//	glTranslatef(x, 1, z-10);
-	//	drawSnowMan();
-	//glPopMatrix();
 
 	glutSwapBuffers();
 }
@@ -170,6 +171,7 @@ int main(int argc, char** argv) {
 	// OpenGL init
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_LIGHTING);
+
 	angle -= 0.00f;
 	lx = sin(angle);
 	lz = -cos(angle);
