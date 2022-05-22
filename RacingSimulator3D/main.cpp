@@ -192,6 +192,7 @@ void draw_env() {
 
 
 	Background bg;
+		bg.drawSun();
 		bg.drawGround(.7, .6, .6, 200, 0);
 		bg.drawStreet(0.2, 0.2, 0.2, 24, 0.5, 400, 1);
 		bg.drawStreetLines(street_lines_z);
@@ -291,7 +292,7 @@ int main(int argc, char** argv) {
 	glutReshapeFunc(changeSize);
 	glutIdleFunc(renderScene);
 
-	glClearColor(0.2f, .8f, 1.0f, 0.7);
+	glClearColor(0.45f, .177f, 1.0f, 0.873);
 
 
 	glutKeyboardFunc(processNormalKeys);
