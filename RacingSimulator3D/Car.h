@@ -4,18 +4,37 @@
 #include<GL/freeglut.h>
 
 class Car {
-
+	
 public:
 	float positionX;
 	float positionY;
-	float positionZ;
+	GLfloat positionZ;
 	float dimension;
 
-	Car(float positionX, float positionY, float positionZ, float dimension) {
+
+	Car(float positionX=0, float positionY=1, float positionZ=0, float dimension=5) {
 		this->positionX = positionX;
 		this->positionY = positionY;
 		this->positionZ = positionZ;
 		this->dimension = dimension;
+	}
+
+	GLfloat get_pos_Z() {
+		return this->positionZ;
+	}
+	GLfloat get_pos_X() {
+		return this->positionX;
+	}
+	void incr_posZ(GLfloat val) {
+		this->positionZ += (GLfloat)val;
+	}
+
+	void change_lane(GLfloat direction) {
+		this->incr_posZ(direction);
+	}
+
+	void incr_posX(GLfloat val) {
+		this->positionX += (GLfloat)val;
 	}
 
 	void drawCar() {
