@@ -17,8 +17,10 @@ float angle = 0.0f;
 // actual vector representing the camera's direction
 float lx = 20.0f, lz = -1.0f;
 // XZ position of the camera
-float x = 0.0f, z = 0.0f;
+float x = 0.0f, z = 0.0f, y = 7.0f;
 
+// view scenario
+int view_mode = 0;
 float street_lines_z = 100;
 
 //grid lines for lanes
@@ -96,6 +98,7 @@ void go_left(void) {
 }
 
 void go_right(void) {
+
 	if ((float)car.get_pos_Z() < GRID_RIGHT) {
 		std::cout << (float)car.get_pos_Z() << " " << GRID_RIGHT << std::endl;
 		car.change_lane((GLfloat)(.5f) - (GLfloat)0.05 * (GLfloat)car_nfs_slowmo_);
@@ -121,8 +124,8 @@ void go_right(void) {
 void player_car() {
 
 	glPushMatrix();
-		glRotatef(90 + car_rot, 0, 1, 0);
-		car.drawCar();
+	glRotatef(90 + car_rot, 0, 1, 0);
+	car.drawCar();
 	glPopMatrix();
 
 	if (((car.get_pos_Z() != (GLfloat)GRID_LEFT) && (car.get_pos_Z() != (GLfloat)GRID_MID)) && contor_z == -1)
@@ -143,17 +146,17 @@ std::tuple <Car, Car> generate_incoming_cars() {
 		Car car_1;
 		Car car_2;
 	};
-	
-	Car car_1( (-(float)(rand()%100+100)), (float)1, (float)car_incoming_pos_val[rand()%3], (float)5);
-	Car car_2( (-(float)(rand()%100+100)), (float)1, (float)car_incoming_pos_val[rand()%3], (float)5);
+
+	Car car_1((-(float)(rand() % 100 + 100)), (float)1, (float)car_incoming_pos_val[rand() % 3], (float)5);
+	Car car_2((-(float)(rand() % 100 + 100)), (float)1, (float)car_incoming_pos_val[rand() % 3], (float)5);
 
 
-	return {car_1, car_2};
+	return { car_1, car_2 };
 }
 
 void incoming() {
 
-	if (incoming_cars->empty() ) {
+	if (incoming_cars->empty()) {
 		std::tuple<Car, Car> cars = generate_incoming_cars();
 		incoming_cars->emplace_back(cars);
 	}
@@ -169,7 +172,7 @@ void incoming() {
 
 
 	for (int i = 0; i < incoming_cars->size(); ++i) {
-			
+
 		std::cout << i << " " << std::get<0>(incoming_cars->at(i)).get_pos_Z() << " " << std::get<1>(incoming_cars->at(0)).get_pos_Z();
 		(std::get<1>(incoming_cars->at(i))).incr_posX(2);
 		(std::get<0>(incoming_cars->at(i))).incr_posX(2);
@@ -224,36 +227,31 @@ void renderScene(void) {
 		light_x+=1;*/
 
 	glPushMatrix();
-		light_x += 0.05;
-		glRotatef(light_x, 0, 0, light_x);
-		light();
+	light_x += 0.05;
+	glRotatef(light_x, 0, 0, light_x);
+	light();
 	glPopMatrix();
 
 	// Reset transformations
 	glLoadIdentity();
 	// Set the camera
-	gluLookAt(	x, 7.0f, z,
-				x + lx, 6.7f, z + lz,
-				0, 0.1f, 0.0f);
+	gluLookAt(x, y, z,
+		x + lx, 6.7f, z + lz,
+		0, 0.1f, 0.0f);
+	//gluLookAt(x, 40, z,
+	//	x, 0, z,
+	//	0, 0.1f, 0.0f);
+	draw_env();
+	player_car();
+	incoming();
 
-	//Background bg;
-	//	bg.drawGround(.3, .3, .3, 200, 0);
-	//	bg.drawStreetLines(street_lines_z);
-	//	bg.drawStreet(0.2, 0.2, 0.2, 24, 0.5, 400, 1);
-	//	bg.drawStreetLines(street_lines_z);
+	glutPostRedisplay();
 
+	glPushMatrix();
+	glRotatef(90, 0, 1, 0);
+	glPopMatrix();
 
-		draw_env();
-		player_car();
-		incoming();
-
-		glutPostRedisplay();
-
-		glPushMatrix();
-		glRotatef(90, 0, 1, 0);
-		glPopMatrix();
-
-		glutSwapBuffers();
+	glutSwapBuffers();
 }
 
 void processNormalKeys(unsigned char key, int x, int y)
@@ -265,7 +263,18 @@ void processNormalKeys(unsigned char key, int x, int y)
 		lx = sin(angle);
 		lz = -cos(angle);
 		break;
-
+	case 'v':
+		view_mode++;
+		if (view_mode == 3) {
+			z += 4.0f;
+			y += 2.0f;
+			view_mode = 0;
+		}
+		else {
+			z -= 2.0f;
+			y -= 1.0f;
+		}
+		break;
 	}
 	if (key == 27)
 		exit(0);
@@ -279,19 +288,19 @@ void processSpecialKeys(int key, int xx, int yy) {
 	float fraction = 0.1f;
 
 	switch (key) {
-	/*case GLUT_KEY_CTRL_R:
-		car_nfs_slowmo_ = 1;*/
+		/*case GLUT_KEY_CTRL_R:
+			car_nfs_slowmo_ = 1;*/
 	case GLUT_KEY_LEFT:
 		if (contor_z == 0 || contor_z == 1) {
-			
+
 		}
 		contor_z = -1;
 		go_left();
-		
+
 		break;
 	case GLUT_KEY_RIGHT:
 		if (contor_z == 0 || contor_z == -1) {
-			
+
 		}
 		contor_z = 1;
 		go_right();
@@ -319,7 +328,7 @@ int main(int argc, char** argv) {
 	glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA);
 	glutInitWindowPosition(100, 100);
 	glutInitWindowSize(1024, 768);
-	glutCreateWindow("Scena 3D cu oameni de zapada");
+	glutCreateWindow("RacingSimulator3D");
 
 	// register callbacks
 	glutDisplayFunc(renderScene);
@@ -338,7 +347,7 @@ int main(int argc, char** argv) {
 	angle -= 0.00f;
 	lx = sin(angle);
 	lz = -cos(angle);
-	
+
 	// enter GLUT event processing cycle
 	glutPostRedisplay();
 	glutMainLoop();

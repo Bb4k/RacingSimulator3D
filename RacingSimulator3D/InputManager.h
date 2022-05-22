@@ -4,7 +4,7 @@
 #include<math.h>
 
 class InputManager
-{	
+{
 
 	float lx, lz, angle;
 	float x, z;
@@ -28,8 +28,15 @@ public:
 			this->lx = sin(angle);
 			this->lz = -cos(angle);
 			break;
+		case 'v':
+			this->angle -= 0.01f;
+			this->lx = sin(angle);
+			this->lz = -cos(angle);
+			break;
 
 		}
+
+
 		if (key == 27)
 			exit(0);
 	}
