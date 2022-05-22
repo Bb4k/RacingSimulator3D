@@ -45,21 +45,8 @@ void changeSize(int w, int h)
 	glMatrixMode(GL_MODELVIEW);
 }
 
-void light() {
-	// sursa de lumina 0
-	glEnable(GL_LIGHT0);
-	GLfloat pozitial0[] = { 0.0f, 2020.0f, 10.0f, 0.0f };
-	GLfloat rosu[] = { 1.0, 0.0, 0.0, 1.0 };
-	GLfloat alb[] = { 1.0, 1.0, 1.0, 0.0 };
-	GLfloat negru[] = { 0.0, 0.0, 0.0, 0.0 };
-	glLightfv(GL_LIGHT0, GL_POSITION, pozitial0);
-	glLightfv(GL_LIGHT0, GL_AMBIENT, alb);
-	glLightf(GL_LIGHT0, GL_CONSTANT_ATTENUATION, 0.2);
-	glLightf(GL_LIGHT0, GL_LINEAR_ATTENUATION, 0.1);
-	glLightf(GL_LIGHT0, GL_QUADRATIC_ATTENUATION, 0.2);
-
-}
 float light_x = -45.0f;
+
 void renderScene(void) {
 
 	// Clear Color and Depth Buffers
@@ -75,7 +62,6 @@ void renderScene(void) {
 	glPushMatrix();
 		light_x += 0.05;
 		glRotatef(light_x, 0, 0, light_x);
-		light();
 	glPopMatrix();
 
 	// Reset transformations
@@ -90,11 +76,10 @@ void renderScene(void) {
 		street_lines_z = 100;
 
 	Background bg;
+		bg.drawSun();
 		bg.drawGround(.3, .3, .3, 200, 0);
 		bg.drawStreetLines(street_lines_z);
 		bg.drawStreet(0.2, 0.2, 0.2, 24, 0.5, 400, 1);
-
-
 	
 	glPushMatrix();
 		glRotatef(90, 0, 1, 0);
@@ -163,7 +148,8 @@ int main(int argc, char** argv) {
 	glutReshapeFunc(changeSize);
 	glutIdleFunc(renderScene);
 
-	glClearColor(0.2f, .8f, 1.0f, 0.7);
+	// Draw purple sky
+	glClearColor(0.454f, .177f, 0.873f, 0.1);
 
 	glutKeyboardFunc(processNormalKeys);
 	glutSpecialFunc(processSpecialKeys);
