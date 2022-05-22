@@ -315,12 +315,6 @@ int main(int argc, char** argv) {
 	// init GLUT and create window
 	glutInit(&argc, argv);
 	srand(time(NULL));
-
-	//glEnable(GL_BLEND);
-	//glEnable(GL_TEXTURE_2D);
-	//glEnable(GL_DEPTH_TEST);
-	//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
 	glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA);
 	glutInitWindowPosition(100, 100);
 	glutInitWindowSize(1024, 768);

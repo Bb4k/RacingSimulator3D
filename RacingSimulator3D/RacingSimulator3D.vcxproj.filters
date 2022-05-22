@@ -35,9 +35,21 @@
     <ClInclude Include="SOIL.h">
       <Filter>Source Files</Filter>
     </ClInclude>
+    <ClInclude Include="stb_image.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="asfalt.png">
+      <Filter>Source Files</Filter>
+    </Image>
+    <Image Include="asfalt2.jpg">
+      <Filter>Source Files</Filter>
+    </Image>
+    <Image Include="asfaltt.png">
+      <Filter>Source Files</Filter>
+    </Image>
+    <Image Include="asfalt.bmp">
       <Filter>Source Files</Filter>
     </Image>
   </ItemGroup>

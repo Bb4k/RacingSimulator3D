@@ -3,6 +3,7 @@
 
 #include<GL/freeglut.h>
 #include "SOIL.h"
+#include <iostream>
 
 class Background {
 
@@ -28,7 +29,7 @@ public:
 		glGenTextures(1, &texture);
 		glBindTexture(GL_TEXTURE_2D, texture);
 
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);	// Set texture wrapping to GL_REPEAT
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);	// Set texture wrapping to GL_REPEAT
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
@@ -37,18 +38,25 @@ public:
 		unsigned char* image = SOIL_load_image("asfalt.png", &width, &height, 0, SOIL_LOAD_RGB);
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
 		SOIL_free_image_data(image);
-		glBindTexture(GL_TEXTURE_2D, 0);
-
+		glBindTexture(GL_TEXTURE_2D, 1);
 	}
 
 	void drawStreet(GLfloat r, GLfloat g, GLfloat b, GLfloat scale_x, GLfloat scale_y, GLfloat scale_z, double size) {
+
+		// Draw ground
 		glEnable(GL_TEXTURE_2D);
-		//LoadTexture();
-		glColor3f(r, g, b);
-		glPushMatrix();
-		glScaled(scale_x, scale_y, scale_z);
-		glutSolidCube(size);
-		glPopMatrix();
+		LoadTexture();
+
+		glBegin(GL_QUADS);
+		glTexCoord2f(1.0, 1.0);
+		glVertex3f(-size * scale_x, size * scale_y, -size * scale_z);
+		glTexCoord2f(1.0, 0.0);
+		glVertex3f(-size * scale_x, size * scale_y, size*scale_z);
+		glTexCoord2f(0.0, 0.0);
+		glVertex3f(size * scale_x, size * scale_y, size * scale_z);
+		glTexCoord2f(0.0, 1.0);
+		glVertex3f(size * scale_x, size * scale_y, -size * scale_z);
+		glEnd();
 
 		glPushMatrix();
 		glColor3f((GLfloat)0.6f, (GLfloat)0.6f, (GLfloat)0.6f);

@@ -64,7 +64,6 @@ public:
 
 		// Draw cabin
 		glEnable(GL_COLOR_MATERIAL);
-		//glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, new GLfloat[4]{ 0.078f, 0.984f, 1.0f, 0.5 });
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		glEnable(GL_BLEND);
 		glColor4f(0.078f, 0.984f, 1.0f, 0.5f);
@@ -74,13 +73,11 @@ public:
 		GLUquadricObj* quadratic;
 		quadratic = gluNewQuadric();
 		gluQuadricDrawStyle(quadratic, GLU_FILL);
-		gluQuadricTexture(quadratic, GL_TRUE);
 		glRotatef(90.0f, 0.0f, 1.0f, 0.0f);
 		glRotatef(-90.0f, 1.0f, 0.0f, 0.0f);
 		glRotatef(45.0f, 0.0f, 0.0f, 1.0f);
 		gluCylinder(quadratic, cabinBaseR, cabinTopR, cabinH, 4, 4);
 		glPopMatrix();
-		glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, new GLfloat[4]{ 0, 0, 0, 1 });
 
 		// Draw plafon
 		glColor3f(0, 0, 0);

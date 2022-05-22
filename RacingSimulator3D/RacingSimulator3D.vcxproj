@@ -153,9 +153,13 @@
     <ClInclude Include="Background.h" />
     <ClInclude Include="Car.h" />
     <ClInclude Include="SOIL.h" />
+    <ClInclude Include="stb_image.h" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="asfalt.bmp" />
     <Image Include="asfalt.png" />
+    <Image Include="asfalt2.jpg" />
+    <Image Include="asfaltt.png" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="SOIL.lib" />
