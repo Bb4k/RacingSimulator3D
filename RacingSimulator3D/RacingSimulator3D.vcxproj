@@ -152,6 +152,13 @@
   <ItemGroup>
     <ClInclude Include="Background.h" />
     <ClInclude Include="Car.h" />
+    <ClInclude Include="SOIL.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="asfalt.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="SOIL.lib" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

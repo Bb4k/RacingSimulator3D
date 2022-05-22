@@ -192,7 +192,6 @@ void incoming() {
 
 void draw_env() {
 
-
 	Background bg;
 	bg.drawSun();
 	bg.drawGround(.7, .6, .6, 200, 0);
@@ -316,6 +315,12 @@ int main(int argc, char** argv) {
 	// init GLUT and create window
 	glutInit(&argc, argv);
 	srand(time(NULL));
+
+	//glEnable(GL_BLEND);
+	//glEnable(GL_TEXTURE_2D);
+	//glEnable(GL_DEPTH_TEST);
+	//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
 	glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA);
 	glutInitWindowPosition(100, 100);
 	glutInitWindowSize(1024, 768);
@@ -327,7 +332,6 @@ int main(int argc, char** argv) {
 	glutIdleFunc(renderScene);
 
 	glClearColor(0.45f, .177f, 1.0f, 0.873);
-
 
 	glutKeyboardFunc(processNormalKeys);
 	glutSpecialFunc(processSpecialKeys);

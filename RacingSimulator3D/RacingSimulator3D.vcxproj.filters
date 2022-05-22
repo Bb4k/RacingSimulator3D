@@ -32,5 +32,18 @@
     <ClInclude Include="Background.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="SOIL.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="asfalt.png">
+      <Filter>Source Files</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="SOIL.lib">
+      <Filter>Source Files</Filter>
+    </Library>
   </ItemGroup>
 </Project>
