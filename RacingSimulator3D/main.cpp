@@ -23,6 +23,8 @@ float x = 0.0f, z = 0.0f;
 
 float street_lines_z = 65;
 
+int view_mode = 0;
+
 //grid lines for lanes
 #define GRID_LEFT -8.0f
 #define GRID_MID 0.0f
@@ -227,13 +229,45 @@ void renderScene(void) {
 void processNormalKeys(unsigned char key, int x, int y)
 {
 
+	float fraction = 0.1f;
+	float view_fraction = 2.0f;
+
 	switch (key) {
 	case 'l':
 		angle -= 0.01f;
 		lx = sin(angle);
 		lz = -cos(angle);
 		break;
-
+	case 'v':
+		view_mode++;
+		if (view_mode == 3) {
+			x -= lx * view_fraction * 2;
+			z -= lz * view_fraction * 2;
+			view_mode = 0;
+		}
+		else {
+			x += lx * view_fraction;
+			z += lz * view_fraction;
+		}
+		break;
+	case 'a':
+		angle -= 0.01f;
+		lx = sin(angle);
+		lz = -cos(angle);
+		break;
+	case 'd':
+		angle += 0.01f;
+		lx = sin(angle);
+		lz = -cos(angle);
+		break;
+	case 'w':
+		x += lx * fraction;
+		z += lz * fraction;
+		break;
+	case 's':
+		x -= lx * fraction;
+		z -= lz * fraction;
+		break;
 	}
 	if (key == 27)
 		exit(0);
@@ -264,14 +298,14 @@ void processSpecialKeys(int key, int xx, int yy) {
 		contor_z = 1;
 		go_right();
 		break;
-	case GLUT_KEY_UP:
-		x += lx * fraction;
-		z += lz * fraction;
-		break;
-	case GLUT_KEY_DOWN:
-		x -= lx * fraction;
-		z -= lz * fraction;
-		break;
+		//case GLUT_KEY_UP:
+		//	x += lx * fraction;
+		//	z += lz * fraction;
+		//	break;
+		//case GLUT_KEY_DOWN:
+		//	x -= lx * fraction;
+		//	z -= lz * fraction;
+		//	break;
 	}
 	glutPostRedisplay();
 }
