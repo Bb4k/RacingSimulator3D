@@ -11,41 +11,42 @@ public:
 
 		glColor3f(r, g, b);
 		glBegin(GL_QUADS);
-			glVertex3f(-size, 0.0f, -size);
-			glVertex3f(-size, 0.0f, size);
-			glVertex3f(size, 0.0f, size);
-			glVertex3f(size, 0.0f, -size);
+		glVertex3f(-size, 0.0f, -size);
+		glVertex3f(-size, 0.0f, size);
+		glVertex3f(size, 0.0f, size);
+		glVertex3f(size, 0.0f, -size);
 		glEnd();
 
-		
+
 	}
 
 	void drawStreet(GLfloat r, GLfloat g, GLfloat b, GLfloat scale_x, GLfloat scale_y, GLfloat scale_z, double size) {
 		//draw street
 		glColor3f(r, g, b);
 		glPushMatrix();
-			glScaled(scale_x, scale_y, scale_z);
-			glutSolidCube(size);
+		glScaled(scale_x, scale_y, scale_z);
+		glutSolidCube(size);
 		glPopMatrix();
 
 		glPushMatrix();
-			glColor3f((GLfloat)0.6f, (GLfloat)0.6f, (GLfloat)0.6f);
-			glTranslated(-scale_x/2-.99f, 0, 0);
-			glScaled(1, scale_y+3, scale_z);
-			glutSolidCube(1);
+		glColor3f((GLfloat)0.6f, (GLfloat)0.6f, (GLfloat)0.6f);
+		glTranslated(-scale_x / 2 - .99f, 0, 0);
+		glScaled(1, scale_y + 3, scale_z);
+		glutSolidCube(1);
 		glPopMatrix();
 
 		glPushMatrix();
-			glColor3f((GLfloat)0.6f, (GLfloat)0.6f, (GLfloat)0.6f);
-			glTranslated(scale_x / 2 + .99f, 0, 0);
-			glScaled(1, scale_y + 3, scale_z);
-			glutSolidCube(1);
+		glColor3f((GLfloat)0.6f, (GLfloat)0.6f, (GLfloat)0.6f);
+		glTranslated(scale_x / 2 + .99f, 0, 0);
+		glScaled(1, scale_y + 3, scale_z);
+		glutSolidCube(1);
 		glPopMatrix();
 
 	}
 
 	void drawStreetLines(float street_lines_z) {
-	
+
+		glMaterialfv(GL_FRONT, GL_EMISSION, new GLfloat[3]{ 0.8, 0.8, 0.8 });
 		glColor3f(0.9f, 0.9f, 0.9f);
 
 		glPushMatrix();
@@ -59,6 +60,9 @@ public:
 		glScaled(1, 0.7, 8);
 		glutSolidCube(1);
 		glPopMatrix();
+
+		glMaterialfv(GL_FRONT, GL_EMISSION, new GLfloat[3]{ 0, 0, 0 });
+
 	}
 
 	void drawSun() {
@@ -92,7 +96,7 @@ public:
 		glPushMatrix();
 		glMaterialfv(GL_FRONT, GL_EMISSION, orange);
 		glTranslatef(10, 10, -110);
-		glutSolidSphere(20, 50, 50);
+		glutSolidSphere(16, 50, 50);
 		glMaterialfv(GL_FRONT, GL_EMISSION, new GLfloat[3]{ 0, 0, 0 });
 		glPopMatrix();
 
